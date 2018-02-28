@@ -1,20 +1,19 @@
 var request = require('request');
 var moment = require('moment');
 var credentials = require('./credentials.json');
+var entinfo = require('./enterpriseinfo.json');
 
-const PROJECT_NAME='NRI-THAI';
-const WORKING_HOURS ='9';
 const UN = credentials.username;
 const PWD = credentials.password;
 
-
-//var base = "http://localhost:8080";
-var base = "http://timesheet.nrifintech.com";
+const PROJECT_NAME= entinfo.project;
+const WORKING_HOURS = entinfo.hours;
+const base = entinfo.urlBase;
                         
-var url = "/nritimesheet/auth/login?targetUri=%2F";
-var loginUrl = "/nritimesheet/auth/signIn";
-var timeSheetData = "/nritimesheet/myTimesheet/getTimesheetData?_search=false&rows=-1&page=1&sidx=&sord=asc";
-var addData = "/nritimesheet/myTimesheet/getSavedWithValidation";
+var url = "/auth/login?targetUri=%2F";
+var loginUrl = "/auth/signIn";
+var timeSheetData = "/myTimesheet/getTimesheetData?_search=false&rows=-1&page=1&sidx=&sord=asc";
+var addData = "/myTimesheet/getSavedWithValidation";
 
 
 request = request.defaults({jar: true , followAllRedirects: true});
