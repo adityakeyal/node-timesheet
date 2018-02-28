@@ -18,12 +18,11 @@ var addData = "/myTimesheet/getSavedWithValidation";
 
 request = request.defaults({jar: true , followAllRedirects: true});
 
-
+// The base header is used to populate some header fields
 var baseHeader = {
 			"Accept" :  "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" ,
 			"Accept-Language" :  "en-US,en;q=0.5" ,
 			"User-Agent" : "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:42.0) Gecko/20100101 Firefox/42.0" ,
-            'host' : 'timesheet.nrifintech.com'
     };
 
 var homePageOptions = {
@@ -34,9 +33,17 @@ var loginFormOptions = { url:base+loginUrl, form: { 'username':UN , 'password' :
   };
 
 
+/** 
+Access the index page 
+*/
 
 request.get( homePageOptions , handleBasicHomePage);
 
+/**
+ * Process the index page.
+ * If successful submit the form
+ * @param {*} error 
+ */
 function handleBasicHomePage(error){
     if(error){
      console.log("error : " +error);
@@ -44,7 +51,10 @@ function handleBasicHomePage(error){
    request.post(loginFormOptions, handleLogin); 
 }
 
-
+/**
+ * Handle response of login.
+ * If successful call dashboard
+ */
 
 function handleLogin(error){
     if(error){
@@ -53,21 +63,41 @@ function handleLogin(error){
     request.get({ url : base+'/nritimesheet/home/dashboard/' , headers : loginFormOptions.headers } , handleDashBoard);
 }
 
-function handleDashBoard(){
+
+/** 
+ * Handle reponse of dashboard.
+ * If successful call existing timesheet data
+ * 
+*/
+function handleDashBoard(error){
  
- 
+    if(error){
+        console.log("Error in dashbaord"+error);
+    }
  
    request.get({ url : base+timeSheetData , headers : baseHeader } , handleTimeSheetData);
           
 }
-       
+
+
+/**
+ * Access the body data
+ * and process
+ * @param {*} err 
+ * @param {*} httpResponse 
+ * @param {*} body 
+ */
 function handleTimeSheetData(err,httpResponse,body){
                        
       var responseDate = JSON.parse(body);
       processData(responseDate.invdata);
   
 }
-
+/**
+ * Process the data 
+ * TODO - Need to refactor the code
+ * @param {*} data 
+ */
 function processData(data){
  
  var listOfDate = [];
