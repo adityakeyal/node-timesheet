@@ -50,7 +50,9 @@ module.exports={
         var formatMomentToDate =  function(momentDate)
         {       return momentDate.clone();    } ;
         var dateRange = rangeDates(date,formatMomentToDate);
-        return dateRange.filter(d => (d.day()!=0 && d.day()!=6) );
+        dateRange.filter(d => (d.day()!=0 && d.day()!=6) );
+
+        return dateRange.map( x=> formatDate(x));
     
 }
 

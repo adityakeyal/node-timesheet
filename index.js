@@ -1,5 +1,5 @@
 var request = require('request');
-var moment = require('moment');
+var mydate = require('./date');
 var credentials = require('./credentials.json');
 var entinfo = require('./enterpriseinfo.json');
 
@@ -101,7 +101,8 @@ function handleTimeSheetData(err,httpResponse,body){
 function processData(data){
  
  var listOfDate = [];
- var firstDate = moment().format("DD-MM-YYYY");
+ 
+ var firstDate = mydate.formatDate();
  
  var myData = [];
  
@@ -118,6 +119,12 @@ function processData(data){
    'delid' : ''
   
   } ));
+
+
+  var businessDays = mydate.fetchBusinessDaysInMonth();
+  businessDays.forEach( d => {if(listOfDate.indexOf(d)<0){
+      console.log("Missing Entry : " + d);
+  }})
  
 
  
@@ -142,7 +149,7 @@ console.log("Add the entry : ");
  
  var myDataStr = JSON.stringify(myData);
  
- //console.log(myDataStr);
+ 
  
  request.post({
   url : base+addData,
